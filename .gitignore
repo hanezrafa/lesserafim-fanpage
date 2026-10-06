@@ -8,6 +8,12 @@ _serve.bat
 _src/
 _verify/
 
+# Design/planning notes kept on disk but not published
+DESIGN.md
+PRODUCT.md
+AGENTS.md
+.impeccable/
+
 # The site ships WebP only. Originals stay on disk but are never pushed.
 assets/photos/*.png
 assets/photos/*.jpg
