@@ -31,9 +31,22 @@
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- render: intro text ---------- */
-  var introText = document.getElementById('intro-text');
-  if (introText) introText.textContent = NJ.group.intro;
+  /* ---------- render: the About fact card ---------- */
+  var g = NJ.group || {};
+  function setText(id, v) {
+    var n = document.getElementById(id);
+    if (n && v != null) n.textContent = v;
+  }
+  setText('fact-slogan', g.tagline || '');
+  setText('fact-name', g.name || '');
+  setText('fact-hangul', g.hangul || '');
+  setText('fact-label', g.label || '');
+  setText('fact-debut', g.debut || '');
+  setText('fact-single', g.debutSingle || '');
+  setText('fact-fandom', g.fandom || '');
+  setText('fact-members', (NJ.members || []).length + ' members');
+  setText('fact-colour', 'Fearless Blue');
+  setText('intro-text', g.intro || '');
 
   /* =========================================================
      The archive data, flattened into one list
