@@ -321,7 +321,8 @@ main { position: relative; z-index: 1; }
   font-size: clamp(0.6rem, 1.2vw, 0.7rem);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
+  text-shadow: 0 1px 10px rgba(4, 7, 16, 0.9);
 }
 .hero__masthead span:nth-child(2) { color: var(--ink-soft); }
 @media (max-width: 640px) { .hero__masthead span:nth-child(2) { display: none; } }
@@ -346,6 +347,7 @@ main { position: relative; z-index: 1; }
   text-transform: uppercase;
   color: var(--fearless-dk);
   margin: 0 0 0.9rem;
+  text-shadow: 0 1px 10px rgba(4, 7, 16, 0.9);
 }
 
 /* ---------- the anagram lockup ----------
@@ -402,9 +404,11 @@ main { position: relative; z-index: 1; }
   font-family: var(--font-mono);
   font-size: clamp(0.72rem, 1.5vw, 0.85rem);
   letter-spacing: 0.2em;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   margin: 1.4rem 0 1.6rem;
   min-height: 1.2em;
+  /* sits over a photo backdrop, so give it a soft backing */
+  text-shadow: 0 1px 12px rgba(4, 7, 16, 0.9), 0 0 3px rgba(4, 7, 16, 0.8);
 }
 .hero__cta {
   display: inline-block;
