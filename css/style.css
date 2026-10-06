@@ -1338,10 +1338,11 @@ main { display: block; }
     top: 0;
     left: 0;
     pointer-events: none;
-    /* the whole thing is centred on the pointer */
-    width: 76px;
-    height: 76px;
-    margin: -38px 0 0 -38px;
+    /* the whole thing is centred on the pointer; the box is sized so the text
+       ring (radius 32 of a 120 viewBox) sits close to the pointer */
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
     transform: translate(var(--rx, 0px), var(--ry, 0px));
   }
   .ring-cursor.is-live { display: block; }
