@@ -1398,110 +1398,131 @@ main { display: block; }
 }
 
 /* =========================================================
-   THE ROLLER - one line that changes and climbs
-   Replaces the old name ticker. A single line swaps between a
-   member, a release and a milestone, with the old line climbing
-   out and the new one climbing in. The label and the meta change
-   with it, and a thin bar shows how long until the next turn.
+   THE CASSETTE - an object, not a line of text
+   A tape sits in the hero. Its two reels turn while a preview is
+   playing, and the label carries the track. The shell is plain CSS:
+   no image, no library.
    ========================================================= */
-.roller {
-  position: relative;
-  border-block: 2px solid var(--fearless);
-  background: var(--board-2);
-  overflow: hidden;
+.cassette {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  bottom: clamp(4.4rem, 10vh, 6.5rem);
+  z-index: 6;
+  width: min(320px, calc(100% - 2rem));
+  transform: rotate(-2deg);
 }
-.roller__inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+.cassette__shell {
+  position: relative;
+  background: linear-gradient(180deg, #262b39, #171b26 60%, #10131c);
+  border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  border-radius: 6px;
+  padding: 0.7rem 0.8rem 0.6rem;
+  box-shadow: 0 22px 40px -20px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+/* the four little screws in the corners */
+.cassette__screws i {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #6b7285, #2a2f3d);
+}
+.cassette__screws i:nth-child(1) { top: 6px; left: 6px; }
+.cassette__screws i:nth-child(2) { top: 6px; right: 6px; }
+.cassette__screws i:nth-child(3) { bottom: 6px; left: 6px; }
+.cassette__screws i:nth-child(4) { bottom: 6px; right: 6px; }
+
+/* the clear window with the two reels */
+.cassette__window {
+  position: relative;
+  display: flex;
   align-items: center;
-  gap: clamp(0.8rem, 3vw, 2rem);
-  padding: clamp(0.7rem, 2vw, 1.1rem) var(--pad);
-  max-width: var(--maxw);
-  margin: 0 auto;
+  justify-content: space-between;
+  gap: 0.6rem;
+  height: 66px;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.35)),
+    #0b0e16;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
 }
-.roller__label {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #ffffff;
-  background: var(--roller-tone, var(--fearless));
-  padding: 0.3rem 0.6rem;
-  white-space: nowrap;
-  transition: background 0.5s ease;
-}
-.roller__viewport {
+.reel {
   position: relative;
-  display: block;
-  /* the size lives here, so the height is measured in the same unit as the
-     text and the line is never clipped */
-  font-size: clamp(1.15rem, 3.4vw, 1.9rem);
-  height: 1.5em;
-  overflow: hidden;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from 0deg, #343b4d 0deg 20deg, #232937 20deg 40deg);
+  border: 3px solid #454e63;
+  box-shadow: inset 0 0 0 6px #12161f;
 }
-.roller__line {
+.reel__hub {
   position: absolute;
-  left: 0;
-  top: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: inherit;
-  letter-spacing: 0.04em;
-  line-height: 1.5;
-  color: var(--ink);
-  white-space: nowrap;
-  transform: translateY(0);
+  inset: 38%;
+  border-radius: 50%;
+  background: #0a0d14;
+  box-shadow: inset 0 0 0 3px #39415a;
 }
-/* the climb: the outgoing line rises out, the incoming one rises in */
-.roller__line.is-out { animation: roll-out 0.45s cubic-bezier(0.7, 0, 0.84, 0) forwards; }
-.roller__line.is-in { animation: roll-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-@keyframes roll-out {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-100%); opacity: 0; }
-}
-@keyframes roll-in {
-  from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-.roller__meta {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  white-space: nowrap;
-  text-align: right;
-}
-/* the bar fills across one cycle, then resets */
-.roller__progress {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
+/* the tape stretched between the reels */
+.cassette__tape {
+  flex: 1 1 auto;
   height: 2px;
-  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  background: linear-gradient(90deg, #6b5a44, #4a4032);
 }
-.roller__progress > span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  background: var(--fearless);
+/* the reels turn only while a preview plays */
+.cassette.is-playing .reel--left { animation: reel-spin 2.4s linear infinite; }
+.cassette.is-playing .reel--right { animation: reel-spin 2.4s linear infinite reverse; }
+@keyframes reel-spin { to { transform: rotate(360deg); } }
+
+/* the paper label */
+.cassette__label {
+  margin-top: 0.55rem;
+  padding: 0.45rem 0.55rem 0.5rem;
+  background: linear-gradient(180deg, #f4f1e8, #ded9cb);
+  border-radius: 3px;
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
 }
-.roller__progress > span.is-ticking {
-  animation: roller-fill 5s linear forwards;
+.cassette__side {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  color: #8a8577;
+  text-transform: uppercase;
 }
-@keyframes roller-fill {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-/* the screen-reader line carries the text; the drawn line is aria-hidden */
-.roller__sr {
-  position: absolute;
-  width: 1px; height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
+.cassette__track {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  color: #15161a;
+  line-height: 1.1;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cassette__album {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: #55534a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 0.9em;
+}
+/* the little feet at the bottom edge of a tape */
+.cassette__foot {
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+.cassette__foot i {
+  width: 14px; height: 4px;
+  background: #0a0d14;
+  border-radius: 2px;
 }
 
 /* =========================================================
@@ -1520,19 +1541,14 @@ main { display: block; }
 }
 @media (max-width: 720px) {
   .topbar { flex-wrap: wrap; gap: 0.5rem 1rem; }
-  /* the roller stacks on a phone: chip above, line, then the meta */
-  .roller__inner {
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-      "label meta"
-      "line  line";
-    row-gap: 0.5rem;
-    align-items: center;
-    padding-inline: clamp(1rem, 5vw, 1.4rem);
+  /* the cassette sits under the hero text on a phone, not beside it */
+  .cassette {
+    position: static;
+    width: min(320px, 100%);
+    margin: 1rem auto 1.5rem;
+    transform: rotate(-1deg);
   }
-  .roller__label { grid-area: label; justify-self: start; }
-  .roller__meta { grid-area: meta; justify-self: end; }
-  .roller__viewport { grid-area: line; font-size: clamp(1.15rem, 5.5vw, 1.6rem); }
+  .hero { padding-bottom: 1.5rem; }
   /* the about fact grid: two up on a phone */
   .factcard__grid { grid-template-columns: 1fr 1fr; }
   .factcard__cell:nth-child(3n) { border-right: 1px solid var(--board-3); }
@@ -1674,9 +1690,9 @@ main { display: block; }
   .section-num::after { transform: scaleX(1); }
   .firmament,
   .star-cursor { display: none !important; }
-  /* the roller still changes its text, but without the climb or the bar */
-  .roller__line.is-out, .roller__line.is-in { animation: none !important; }
-  .roller__progress > span.is-ticking { animation: none !important; }
+  /* the cassette keeps its label, but the reels do not turn */
+  .cassette.is-playing .reel--left,
+  .cassette.is-playing .reel--right { animation: none !important; }
   .hero__word::after { display: none; }
   .nowplaying__disc, .nowplaying__eq span { animation: none !important; }
   /* new photo effects: hold still, show the first slide, drop the parallax */

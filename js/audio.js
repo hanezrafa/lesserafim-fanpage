@@ -49,12 +49,21 @@
     });
   }
 
+  // the cassette in the hero mirrors the player: its label shows the track and
+  // its reels turn while a preview is playing
+  var tape = document.getElementById('cassette');
+  var tapeTrack = document.getElementById('tape-track');
+  var tapeAlbum = document.getElementById('tape-album');
+
   function show(pv, playing) {
     if (artEl && pv.art) { artEl.src = pv.art; artEl.alt = 'Cover of ' + pv.album; }
     if (trackEl) trackEl.textContent = pv.track;
     if (albumEl) albumEl.textContent = pv.album;
     if (labelEl) labelEl.textContent = playing ? 'Now playing \u00b7 on repeat' : (wantPlay ? 'Loading\u2026' : 'Paused');
     box.classList.toggle('is-playing', !!playing);
+    if (tapeTrack) tapeTrack.textContent = pv.track;
+    if (tapeAlbum) tapeAlbum.textContent = pv.album;
+    if (tape) tape.classList.toggle('is-playing', !!playing);
   }
 
   function setToggle(on) {
@@ -114,6 +123,7 @@
     wantPlay = false;
     audio.pause();
     box.classList.remove('is-playing');
+    if (tape) tape.classList.remove('is-playing');
     setToggle(false);
     setPlayingButton(null);
     if (labelEl) labelEl.textContent = 'Paused';
