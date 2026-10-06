@@ -57,7 +57,8 @@ var NJ = {
         ['Colour', 'Pink']
       ],
       photo: 'SAKU-01.webp',
-      silhouette: 'SAKU-02.webp'
+      silhouette: 'SAKU-02.webp',
+      gallery: ['SAKU-11.webp', 'SAKU-12.webp', 'SAKU-13.webp', 'SAKU-14.webp']
     },
     {
       id: 'chaewon',
@@ -82,7 +83,8 @@ var NJ = {
         ['Colour', 'Silver']
       ],
       photo: 'CHAE-01.webp',
-      silhouette: 'CHAE-02.webp'
+      silhouette: 'CHAE-02.webp',
+      gallery: ['CHAE-11.webp', 'CHAE-12.webp', 'CHAE-13.webp', 'CHAE-14.webp']
     },
     {
       id: 'yunjin',
@@ -107,7 +109,8 @@ var NJ = {
         ['Colour', 'Green']
       ],
       photo: 'YUNJIN-01.webp',
-      silhouette: 'YUNJIN-02.webp'
+      silhouette: 'YUNJIN-02.webp',
+      gallery: ['YUNJIN-11.webp', 'YUNJIN-12.webp', 'YUNJIN-13.webp', 'YUNJIN-14.webp']
     },
     {
       id: 'kazuha',
@@ -132,7 +135,8 @@ var NJ = {
         ['Colour', 'Blue']
       ],
       photo: 'KAZUHA-01.webp',
-      silhouette: 'KAZUHA-02.webp'
+      silhouette: 'KAZUHA-02.webp',
+      gallery: ['KAZUHA-11.webp', 'KAZUHA-12.webp', 'KAZUHA-13.webp', 'KAZUHA-14.webp']
     },
     {
       id: 'eunchae',
@@ -157,7 +161,8 @@ var NJ = {
         ['Colour', 'Red']
       ],
       photo: 'EUNCHAE-01.webp',
-      silhouette: 'EUNCHAE-02.webp'
+      silhouette: 'EUNCHAE-02.webp',
+      gallery: ['EUNCHAE-11.webp', 'EUNCHAE-12.webp', 'EUNCHAE-13.webp', 'EUNCHAE-14.webp']
     }
   ],
 
@@ -183,19 +188,19 @@ var NJ = {
   // Era timeline. Each era carries a colour drawn from its own release art,
   // so the story reads as a spectrum, not a grey list.
   eras: [
-    { id: 'fearless', year: '2022', title: 'Fearless', tone: '#4d8dff', bg: 'assets/eras/era-fearless.webp',
+    { id: 'fearless', year: '2022', title: 'Fearless', tone: '#4d8dff', bg: 'assets/eras/era-fearless.webp', gallery: ['assets/eras/era-fearless-1.webp', 'assets/eras/era-fearless-2.webp', 'assets/eras/era-fearless-3.webp', 'assets/eras/era-fearless-4.webp'],
       blurb: 'The debut EP, released May 2, 2022, with lead single "Fearless". Eight days later the group took their first music show win, on SBS MTV\u2019s The Show.' },
-    { id: 'antifragile', year: '2022', title: 'Antifragile', tone: '#9b7bff', bg: 'assets/eras/era-antifragile.webp',
+    { id: 'antifragile', year: '2022', title: 'Antifragile', tone: '#9b7bff', bg: 'assets/eras/era-antifragile.webp', gallery: ['assets/eras/era-antifragile-1.webp', 'assets/eras/era-antifragile-2.webp', 'assets/eras/era-antifragile-3.webp', 'assets/eras/era-antifragile-4.webp'],
       blurb: 'The first release as five members, in October 2022. It made them the fastest K-pop girl group to debut on the Billboard 200 at the time, at number 14, and their first million-selling release.' },
-    { id: 'unforgiven', year: '2023', title: 'Unforgiven', tone: '#ffb35c', bg: 'assets/eras/era-unforgiven.webp',
+    { id: 'unforgiven', year: '2023', title: 'Unforgiven', tone: '#ffb35c', bg: 'assets/eras/era-unforgiven.webp', gallery: ['assets/eras/era-unforgiven-1.webp', 'assets/eras/era-unforgiven-2.webp', 'assets/eras/era-unforgiven-3.webp', 'assets/eras/era-unforgiven-4.webp'],
       blurb: 'The first studio album, in May 2023, with a Nile Rodgers feature on the title track. It became their first number one on the Circle Album Chart, and they made their Japanese debut that January.' },
-    { id: 'perfectnight', year: '2023', title: 'Perfect Night', tone: '#ff9ec4', bg: 'assets/eras/era-perfectnight.webp',
+    { id: 'perfectnight', year: '2023', title: 'Perfect Night', tone: '#ff9ec4', bg: 'assets/eras/era-perfectnight.webp', gallery: ['assets/eras/era-perfectnight-1.webp', 'assets/eras/era-perfectnight-2.webp', 'assets/eras/era-perfectnight-3.webp', 'assets/eras/era-perfectnight-4.webp'],
       blurb: 'Their first English single, in October 2023, made with Blizzard for Overwatch 2. It became their first number one on the Circle Digital Chart, holding the top spot for six weeks.' },
-    { id: 'easy-crazy', year: '2024', title: 'Easy / Crazy', tone: '#6fe0d0', bg: 'assets/eras/era-easy-crazy.webp',
+    { id: 'easy-crazy', year: '2024', title: 'Easy / Crazy', tone: '#6fe0d0', bg: 'assets/eras/era-easy-crazy.webp', gallery: ['assets/eras/era-easy-crazy-1.webp', 'assets/eras/era-easy-crazy-2.webp', 'assets/eras/era-easy-crazy-3.webp', 'assets/eras/era-easy-crazy-4.webp'],
       blurb: 'Two EPs in 2024. "Easy" gave them their first Billboard Hot 100 entry and a Coachella debut; "Crazy" followed in August and won them a first MTV VMA, PUSH Performance of the Year.' },
-    { id: 'hot', year: '2025', title: 'Hot', tone: '#ff7a8a', bg: 'assets/eras/era-hot.webp',
+    { id: 'hot', year: '2025', title: 'Hot', tone: '#ff7a8a', bg: 'assets/eras/era-hot.webp', gallery: ['assets/eras/era-hot-1.webp', 'assets/eras/era-hot-2.webp', 'assets/eras/era-hot-3.webp', 'assets/eras/era-hot-4.webp'],
       blurb: 'The fifth EP, in March 2025, and the launch of the Easy Crazy Hot Tour, their first world tour. It grossed 34.1 million US dollars, one of the ten highest-grossing K-pop tours of 2025.' },
-    { id: 'now', year: '2025-26', title: 'Now', tone: '#6fdca0', bg: 'assets/eras/era-now.webp',
+    { id: 'now', year: '2025-26', title: 'Now', tone: '#6fdca0', bg: 'assets/eras/era-now.webp', gallery: ['assets/eras/era-now-1.webp', 'assets/eras/era-now-2.webp', 'assets/eras/era-now-3.webp', 'assets/eras/era-now-4.webp'],
       blurb: 'The single album "Spaghetti" in October 2025, then the second studio album "Pureflow Pt. 1" in May 2026 with lead single "Celebration", and a second world tour.' }
   ],
 

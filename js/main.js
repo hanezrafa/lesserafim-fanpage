@@ -29,6 +29,8 @@
   }
   function norm(s) { return String(s).toLowerCase().replace(/[^a-z0-9]/g, ''); }
 
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ---------- render: intro text ---------- */
   var introText = document.getElementById('intro-text');
   if (introText) introText.textContent = NJ.group.intro;
@@ -164,6 +166,7 @@
     var panel = document.getElementById('rail-list');
     if (panel) panel.setAttribute('aria-labelledby', 'tab-' + tab);
     buildRail();
+    setArchiveBackdrop(tab);
     if (opts.keepSelection) {
       markActive(!opts.firstPaint);
     } else {
@@ -179,10 +182,23 @@
     var facts = (m.facts || []).map(function (row) {
       return '<li class="kv"><span class="k">' + esc(row[0]) + '</span><span class="v">' + esc(row[1]) + '</span></li>';
     }).join('');
+
+    // the gallery: the portrait first, then the extra shots from data.js
+    var shots = [m.photo].concat(m.gallery || []);
+    var thumbs = shots.map(function (f, i) {
+      return '<button class="pane__thumb' + (i === 0 ? ' is-current' : '') + '" type="button" ' +
+        'data-src="' + PHOTO_BASE + esc(f) + '" data-index="' + i + '" ' +
+        'aria-label="Show photo ' + (i + 1) + ' of ' + shots.length + '">' +
+        '<img src="' + PHOTO_BASE + esc(f) + '" alt="" loading="lazy" decoding="async">' +
+      '</button>';
+    }).join('');
+
     return '' +
-      '<div class="pane__media">' +
-        '<img class="pane__portrait" src="' + PHOTO_BASE + esc(m.photo) + '" alt="' + esc(m.name) + ' of LE SSERAFIM" width="600" height="750">' +
+      '<div class="pane__media pane__media--member">' +
+        '<img class="pane__portrait" id="pane-portrait-main" src="' + PHOTO_BASE + esc(m.photo) + '" ' +
+          'alt="' + esc(m.name) + ' of LE SSERAFIM" width="600" height="750">' +
         '<span class="pane__wash" aria-hidden="true"></span>' +
+        '<span class="pane__foot"><span id="pane-shot-label">Portrait</span> \u00b7 ' + shots.length + ' photos</span>' +
       '</div>' +
       '<div class="pane__body">' +
         '<p class="pane__eyebrow">' + esc(m.status || 'Member') + ' \u00b7 LE SSERAFIM</p>' +
@@ -191,6 +207,12 @@
         '<p class="pane__lead">' + esc(m.blurb || '') + '</p>' +
         '<p class="pane__text">' + esc(m.bio || '') + '</p>' +
         '<ul class="pane__facts">' + facts + '</ul>' +
+        (shots.length > 1
+          ? '<div class="pane__gallery">' +
+              '<span class="pane__gallery-label">More photos</span>' +
+              '<div class="pane__thumbs">' + thumbs + '</div>' +
+            '</div>'
+          : '') +
       '</div>';
   }
 
@@ -220,6 +242,9 @@
   function paneEra(e) {
     var idx = (NJ.eras || []).indexOf(e);
     var next = (NJ.eras || [])[idx + 1];
+    var strip = (e.gallery || []).map(function (f) {
+      return '<img src="' + absUrl(f) + '" alt="' + esc(e.title) + ' era photo" loading="lazy" decoding="async">';
+    }).join('');
     return '' +
       '<div class="pane__media pane__media--era">' +
         '<span class="pane__era-bg" style="background-image:url(&quot;' + absUrl(e.bg || '') + '&quot;)" aria-hidden="true"></span>' +
@@ -229,6 +254,7 @@
         '<p class="pane__eyebrow">Era \u00b7 ' + esc(e.year) + '</p>' +
         '<h3 class="pane__title">' + esc(e.title) + '</h3>' +
         '<p class="pane__text">' + esc(e.blurb) + '</p>' +
+        (strip ? '<div class="pane__strip" aria-label="' + esc(e.title) + ' photos">' + strip + '</div>' : '') +
         (next ? '<p class="pane__next">Next era \u00b7 ' + esc(next.title) + ', ' + esc(next.year) + '</p>' : '<p class="pane__next">Latest era on this page.</p>') +
       '</div>';
   }
@@ -250,10 +276,14 @@
     else if (it.release) pane.innerHTML = paneRelease(it.release);
     else if (it.era) pane.innerHTML = paneEra(it.era);
     else if (it.milestone) pane.innerHTML = paneMilestone(it.milestone);
-    // replay the pane's own small entrance
+    // a smooth swap: fade the pane down, swap the content, fade it back up.
+    // Under reduced motion the CSS makes this instant.
     pane.classList.remove('is-in');
-    void pane.offsetWidth;
-    pane.classList.add('is-in');
+    setTimeout(function () {
+      pane.classList.add('is-in');
+      // let the parallax layer pick up the fresh images
+      document.dispatchEvent(new CustomEvent('lss:pane'));
+    }, reduce ? 0 : 150);
   }
 
   /* =========================================================
@@ -379,9 +409,24 @@
   }
   if (pane) {
     pane.addEventListener('click', function (e) {
-      var b = e.target.closest('.pane__play');
-      if (b && b.dataset.track && window.lssPlayTrack) {
-        window.lssPlayTrack(b.dataset.track);
+      var play = e.target.closest('.pane__play');
+      if (play && play.dataset.track && window.lssPlayTrack) {
+        window.lssPlayTrack(play.dataset.track);
+        return;
+      }
+      // the member carousel: clicking a thumb swaps the big portrait
+      var thumb = e.target.closest('.pane__thumb');
+      if (thumb) {
+        var main = document.getElementById('pane-portrait-main');
+        var label = document.getElementById('pane-shot-label');
+        if (main) main.src = thumb.dataset.src;
+        Array.prototype.forEach.call(pane.querySelectorAll('.pane__thumb'), function (t) {
+          t.classList.toggle('is-current', t === thumb);
+        });
+        if (label) {
+          var idx = Number(thumb.dataset.index) || 0;
+          label.textContent = idx === 0 ? 'Portrait' : 'Photo ' + (idx + 1);
+        }
       }
     });
   }
@@ -390,6 +435,61 @@
     if (suppressHash) return;
     applyHash();
   });
+
+  /* =========================================================
+     Photo backdrops
+     - the hero cycles through the group shots
+     - the archive swaps a faint backdrop when the tab changes
+     ========================================================= */
+  function initHeroBackdrop() {
+    var host = document.getElementById('hero-backdrop');
+    if (!host) return;
+    var files = [];
+    for (var i = 1; i <= 8; i++) files.push(PHOTO_BASE + 'HERO-0' + i + '.webp');
+    files.forEach(function (f, i) {
+      var d = el('div', 'hero__slide' + (i === 0 ? ' is-on' : ''));
+      d.style.backgroundImage = 'url("' + absUrl(f) + '")';
+      host.appendChild(d);
+    });
+    if (reduce || files.length < 2) return;
+    var slides = host.querySelectorAll('.hero__slide');
+    var at = 0;
+    var timer = setInterval(function () {
+      slides[at].classList.remove('is-on');
+      at = (at + 1) % slides.length;
+      slides[at].classList.add('is-on');
+    }, 5000);
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) clearInterval(timer);
+    });
+  }
+
+  var ARCHIVE_BG = {
+    members: 'TAB-members.webp',
+    releases: 'TAB-discography.webp',
+    eras: 'TAB-eras.webp',
+    milestones: 'TAB-milestones.webp'
+  };
+  function initArchiveBackdrop() {
+    var arch = document.querySelector('.archive');
+    if (!arch) return;
+    var box = el('div', 'archive__backdrop');
+    box.setAttribute('aria-hidden', 'true');
+    Object.keys(ARCHIVE_BG).forEach(function (k) {
+      var d = el('div', 'archive__bg');
+      d.dataset.tab = k;
+      d.style.backgroundImage = 'url("' + absUrl(PHOTO_BASE + ARCHIVE_BG[k]) + '")';
+      box.appendChild(d);
+    });
+    arch.insertBefore(box, arch.firstChild);
+  }
+  function setArchiveBackdrop(tab) {
+    var box = document.querySelector('.archive__backdrop');
+    if (!box) return;
+    Array.prototype.forEach.call(box.querySelectorAll('.archive__bg'), function (d) {
+      d.classList.toggle('is-on', d.dataset.tab === tab);
+    });
+  }
 
   /* =========================================================
      The anagram lockup
@@ -607,6 +707,8 @@
 
   typeableHeadings();
   initAnagram();
+  initHeroBackdrop();
+  initArchiveBackdrop();
   heroReveal();
   bindReveal();
 
@@ -617,4 +719,5 @@
   } else {
     markActive(false);
   }
+  setArchiveBackdrop(state.tab);
 })();

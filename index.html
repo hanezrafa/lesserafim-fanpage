@@ -63,6 +63,9 @@
   <main>
     <!-- ============ FIRST VIEWPORT: the name ============ -->
     <section class="hero" id="board" aria-labelledby="hero-title">
+      <!-- a rotating photo backdrop: group shots cross-fade behind the name -->
+      <div class="hero__backdrop" id="hero-backdrop" aria-hidden="true"></div>
+
       <!-- a thin masthead rule, like a cover -->
       <div class="hero__masthead" aria-hidden="true">
         <span>LE SSERAFIM</span>
@@ -111,7 +114,7 @@
     <section class="archive" id="archive" data-section="Archive" aria-label="LE SSERAFIM archive">
       <div class="archive__head">
         <h2 class="section-num"><span>02</span> The Archive</h2>
-        <p class="archive__hint">Pick a member, a release, an era or a milestone. The page on the right fills in. The previews loop as you browse.</p>
+        <p class="archive__hint">Pick a member, a release, an era or a milestone. The detail opens beside the list, and the previews loop as you browse.</p>
       </div>
 
       <!-- player read-out: shows what is looping -->

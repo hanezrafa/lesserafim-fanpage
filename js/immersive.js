@@ -232,6 +232,34 @@
   }
 
   /* ---------------------------------------------------------
+     Image parallax: photos in the pane drift a little as the page
+     scrolls, so the reading sections are not flat. Query the media
+     fresh each scroll (the pane is rebuilt when the item changes).
+     --------------------------------------------------------- */
+  function initImageParallax() {
+    if (reduce) return;
+    var ticking = false;
+    function update() {
+      var vh = window.innerHeight;
+      var media = document.querySelectorAll('.pane__media, .pane__strip img, .hero__backdrop');
+      Array.prototype.forEach.call(media, function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -80 || r.top > vh + 80) return;      // off screen
+        var mid = (r.top + r.height / 2 - vh / 2) / vh;      // -1 .. 1
+        el.style.setProperty('--plx', (-mid * 14).toFixed(2) + 'px');
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    // the pane is rebuilt on every selection, so re-run after a moment
+    document.addEventListener('lss:pane', update);
+    update();
+  }
+
+  /* ---------------------------------------------------------
      Star burst: from the play control, and around a member card
      --------------------------------------------------------- */
   function burst(x, y, colour, n, spread) {
@@ -284,6 +312,7 @@
     initScrollProgress();
     initRipple();
     initBurst();
+    initImageParallax();
     themeFromStorage();
   }
 
