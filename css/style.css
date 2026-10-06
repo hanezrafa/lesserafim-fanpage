@@ -1361,9 +1361,9 @@ main { display: block; }
   .ring-cursor__svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .ring-cursor__text {
     font-family: var(--font-mono);
-    font-size: 9.5px;
+    font-size: 20px;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.08em;
     fill: var(--fearless-dk);
     opacity: 0.95;
     transition: fill 0.2s, opacity 0.2s;
