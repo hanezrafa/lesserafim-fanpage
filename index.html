@@ -91,14 +91,17 @@
       </ul>
     </section>
 
-    <!-- ============ running ticker ============ -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker__track">
-        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
-        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
-        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
-        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
+    <!-- ============ the roller: one line, changing, climbing ============ -->
+    <div class="roller" id="roller" aria-live="polite">
+      <div class="roller__inner">
+        <span class="roller__label" id="roller-label">Now</span>
+        <span class="roller__viewport">
+          <span class="roller__line" id="roller-line" aria-hidden="true"></span>
+          <span class="roller__sr" id="roller-sr"></span>
+        </span>
+        <span class="roller__meta" id="roller-meta"></span>
       </div>
+      <div class="roller__progress" aria-hidden="true"><span id="roller-bar"></span></div>
     </div>
 
     <!-- ============ ABOUT: a group fact card ============ -->
@@ -213,6 +216,7 @@
   <script src="js/previews.js"></script>
   <script src="js/main.js"></script>
   <script src="js/texthover.js"></script>
+  <script src="js/roller.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/immersive.js"></script>
 </body>
