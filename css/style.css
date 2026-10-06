@@ -32,7 +32,7 @@
   --font-mono: "Space Mono", ui-monospace, monospace;
 
   --pad: clamp(1rem, 4vw, 4rem);
-  --maxw: 1280px;
+  --maxw: 1440px;
 }
 
 /* ---------- a rare light mode: day sky ----------
@@ -712,7 +712,7 @@ main { display: block; }
 
 .archive__grid {
   display: grid;
-  grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
+  grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
   gap: clamp(1rem, 2.5vw, 2rem);
   align-items: start;
 }
