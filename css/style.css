@@ -712,43 +712,79 @@ main { display: block; }
 
 .archive__grid {
   display: grid;
-  grid-template-columns: minmax(240px, 360px) minmax(0, 1fr);
+  grid-template-columns: minmax(240px, 340px) minmax(0, 1fr);
   gap: clamp(1rem, 2.5vw, 2rem);
   align-items: start;
 }
 
-/* ---------- the rail: tabs across the top, then the list ---------- */
+/* ---------- the tabs: a full-width bar across the top of the archive ---------- */
 .rail {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--board-3);
   border: 1px solid var(--board-3);
+  margin-bottom: clamp(1rem, 2.5vw, 1.6rem);
 }
 .rail__tab {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 0 0.7rem;
   text-align: left;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
   background: var(--board);
   border: 0;
-  padding: 0.7rem 0.7rem;
+  padding: clamp(0.8rem, 2vw, 1.3rem) clamp(0.8rem, 2vw, 1.3rem);
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.18s, color 0.18s;
 }
-.rail__tab:hover { color: var(--ink); background: var(--board-2); }
-.rail__tab.is-active { background: var(--fearless); color: #ffffff; }
-.rail__tab-num { opacity: 0.7; font-size: 0.66rem; }
+/* a thin progress line under the active tab */
+.rail__tab::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: var(--fearless);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rail__tab.is-active::after { transform: scaleX(1); }
+.rail__tab-num {
+  grid-row: 1 / 3;
+  align-self: center;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  line-height: 1;
+  color: var(--ink-faint);
+  transition: color 0.18s;
+}
+.rail__tab-label {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.rail__tab-sub {
+  grid-column: 2;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 0.3rem;
+}
+.rail__tab:hover { background: var(--board-2); }
+.rail__tab:hover .rail__tab-num { color: var(--fearless-dk); }
+.rail__tab.is-active { background: var(--board-2); }
+.rail__tab.is-active .rail__tab-num { color: var(--fearless-dk); }
 
 .rail-list-wrap {
-  margin-top: 1px;
   border: 1px solid var(--board-3);
-  border-top: 0;
   background: var(--board);
   max-height: min(58vh, 560px);
   overflow: auto;
@@ -1313,16 +1349,22 @@ main { display: block; }
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width: 980px) {
-  /* the archive stacks: rail on top, pane below */
+@media (max-width: 860px) {
+  /* only the smaller screens stack: list on top, pane below. Tabs go 2x2. */
   .archive__grid { grid-template-columns: 1fr; }
+  .rail { grid-template-columns: 1fr 1fr; }
   .rail-list-wrap { max-height: 46vh; }
   .pane { grid-template-columns: minmax(160px, 240px) minmax(0, 1fr); }
 }
+@media (min-width: 861px) and (max-width: 1080px) {
+  /* a tablet keeps the split view, but the rail can be a little tighter */
+  .archive__grid { grid-template-columns: minmax(200px, 260px) minmax(0, 1fr); }
+}
 @media (max-width: 720px) {
-  .topbar__nav { gap: 0.75rem; font-size: 0.7rem; letter-spacing: 0.02em; }
   .topbar { flex-wrap: wrap; gap: 0.5rem 1rem; }
-  .topbar__nav { margin-left: 0; width: 100%; justify-content: space-between; }
+  /* the archive tabs already switch the sections, so the top nav is hidden on
+     a phone to avoid two menus that do the same thing */
+  .topbar__nav { display: none; }
 
   /* the pane goes single column, media on top */
   .pane { grid-template-columns: 1fr; min-height: 0; }
@@ -1332,8 +1374,12 @@ main { display: block; }
   .pane__media--art { aspect-ratio: 1 / 1; padding: 1rem; }
   .pane__media--art .pane__art img { width: min(100%, 220px); }
   .pane__portrait { object-position: center 42%; }
-  .rail { grid-template-columns: 1fr 1fr; }
-  .rail__tab { font-size: 0.68rem; padding: 0.6rem 0.55rem; }
+  /* the tabs stay 4 across but shrink; the sub-label is dropped for space */
+  .rail { grid-template-columns: repeat(4, 1fr); }
+  .rail__tab { grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 0.3rem 0; padding: 0.7rem 0.5rem; text-align: center; }
+  .rail__tab-num { grid-row: auto; font-size: 1.1rem; }
+  .rail__tab-label { grid-column: 1; font-size: 0.82rem; }
+  .rail__tab-sub { display: none; }
 }
 
 /* =========================================================
