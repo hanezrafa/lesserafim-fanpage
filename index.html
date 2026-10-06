@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LE SSERAFIM · Fan Firmament</title>
+  <meta name="description" content="An unofficial LE SSERAFIM fan page: member profiles, a playable discography, the era timeline and the group's documented milestones. Fan-made, not official." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // keep the page dark by default; allow a light override from a previous visit
+    (function () {
+      try {
+        var s = localStorage.getItem('lss-theme');
+        document.documentElement.setAttribute('data-theme', s === 'light' ? 'light' : 'dark');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#board">Skip to the board</a>
+
+  <!-- the firmament: a canvas of drifting stars behind everything -->
+  <div class="firmament" id="firmament" aria-hidden="true">
+    <canvas id="starfield"></canvas>
+  </div>
+
+  <!-- custom star cursor -->
+  <div class="star-cursor" id="star-cursor" aria-hidden="true">
+    <span class="star-cursor__dot"></span>
+    <span class="star-cursor__ring"></span>
+  </div>
+
+  <!-- screen texture: a faint film grain (no scanline) -->
+  <div class="screen-fx" aria-hidden="true">
+    <div class="screen-fx__grain"></div>
+  </div>
+
+  <!-- Taped header label -->
+  <header class="topbar" aria-label="LE SSERAFIM fan page">
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress"></span></div>
+    <span class="topbar__tape">UNOFFICIAL</span>
+    <span class="topbar__name">LE SSERAFIM</span>
+    <span class="topbar__here" id="section-here" aria-hidden="true">01 / 05  About</span>
+    <nav class="topbar__nav">
+      <a href="#archive" data-goto-tab="members">Members</a>
+      <a href="#archive" data-goto-tab="releases">Music</a>
+      <a href="#archive" data-goto-tab="eras">Eras</a>
+      <a href="#archive" data-goto-tab="milestones">Milestones</a>
+    </nav>
+    <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="Play the discography">
+      <span class="sound-toggle__icon" data-on="&#9654;" data-off="&#10073;&#10073;" aria-hidden="true">&#9654;</span>
+      <span class="sound-toggle__label" aria-hidden="true">Play</span>
+    </button>
+  </header>
+
+  <main>
+    <!-- ============ FIRST VIEWPORT: the name ============ -->
+    <section class="hero" id="board" aria-labelledby="hero-title">
+      <!-- a thin masthead rule, like a cover -->
+      <div class="hero__masthead" aria-hidden="true">
+        <span>LE SSERAFIM</span>
+        <span>FAN FIRMAMENT &#183; EST. 2022</span>
+        <span>UNOFFICIAL</span>
+      </div>
+
+      <div class="hero__center">
+        <p class="hero__kicker">An anagram</p>
+        <!-- the anagram lockup: I'M FEARLESS <-> LE SSERAFIM, letter by letter -->
+        <h1 id="hero-title" class="hero__title" aria-label="LE SSERAFIM, an anagram of I am fearless">
+          <span class="hero__word" id="hero-word" aria-hidden="true"></span>
+        </h1>
+        <p class="hero__sub" id="hero-sub" aria-hidden="true">&#8220;I&#8217;m fearless&#8221;, rearranged</p>
+        <a class="hero__cta" id="hero-play" href="#archive" data-goto-tab="releases">Play the music</a>
+      </div>
+
+      <ul class="hero__strip" aria-label="Quick facts">
+        <li>Debut 2022</li>
+        <li>5 Members</li>
+        <li>Source Music</li>
+        <li>FEARNOT</li>
+      </ul>
+    </section>
+
+    <!-- ============ running ticker ============ -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
+        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
+        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
+        <span>Sakura</span><span>&#183;</span><span>Chaewon</span><span>&#183;</span><span>Yunjin</span><span>&#183;</span><span>Kazuha</span><span>&#183;</span><span>Eunchae</span><span>&#183;</span>
+      </div>
+    </div>
+
+    <!-- ============ ABOUT (a short lead under the hero) ============ -->
+    <section class="intro" data-section="About" aria-labelledby="intro-h">
+      <h2 id="intro-h" class="section-num"><span>01</span> About</h2>
+      <div class="intro__body">
+        <p class="intro__lead">Five members, one word: fearless. A group built on advancing without fear.</p>
+        <p class="intro__text" id="intro-text"></p>
+      </div>
+    </section>
+
+    <!-- ============ THE ARCHIVE: a rail of items + a detail pane ============ -->
+    <section class="archive" id="archive" data-section="Archive" aria-label="LE SSERAFIM archive">
+      <div class="archive__head">
+        <h2 class="section-num"><span>02</span> The Archive</h2>
+        <p class="archive__hint">Pick a member, a release, an era or a milestone. The page on the right fills in. The previews loop as you browse.</p>
+      </div>
+
+      <!-- player read-out: shows what is looping -->
+      <div class="nowplaying" id="nowplaying">
+        <div class="nowplaying__disc" id="np-disc" aria-hidden="true">
+          <img id="np-art" src="favicon.png" alt="" />
+        </div>
+        <div class="nowplaying__meta">
+          <span class="nowplaying__label" id="np-label">Ready to play</span>
+          <span class="nowplaying__track" id="np-track"></span>
+          <span class="nowplaying__album" id="np-album"></span>
+        </div>
+        <div class="nowplaying__eq" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <button class="nowplaying__stop" id="np-stop" type="button">Stop</button>
+      </div>
+
+      <div class="archive__grid">
+        <!-- the rail: tabs + the list for the active tab -->
+        <div class="rail-col">
+          <div class="rail" role="tablist" aria-label="Archive sections" id="rail-tabs">
+            <button class="rail__tab" type="button" role="tab" id="tab-members" data-tab="members" aria-controls="rail-list" aria-selected="true">
+              <span class="rail__tab-num">01</span> Members
+            </button>
+            <button class="rail__tab" type="button" role="tab" id="tab-releases" data-tab="releases" aria-controls="rail-list" aria-selected="false">
+              <span class="rail__tab-num">02</span> Discography
+            </button>
+            <button class="rail__tab" type="button" role="tab" id="tab-eras" data-tab="eras" aria-controls="rail-list" aria-selected="false">
+              <span class="rail__tab-num">03</span> Eras
+            </button>
+            <button class="rail__tab" type="button" role="tab" id="tab-milestones" data-tab="milestones" aria-controls="rail-list" aria-selected="false">
+              <span class="rail__tab-num">04</span> Milestones
+            </button>
+          </div>
+
+          <div class="rail-list-wrap">
+            <ul class="rail-list" id="rail-list" role="tabpanel" aria-labelledby="tab-members"></ul>
+          </div>
+        </div>
+
+        <!-- the pane: shows the chosen item, changes in place -->
+        <article class="pane" id="pane" aria-live="polite" aria-label="Detail"></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="foot__note">Unofficial fan page. Not affiliated with LE SSERAFIM, Source Music or HYBE.</p>
+    <p class="foot__credit">Photos: fan wallpaper archive, uhdpaper.com. Facts: public sources (Wikipedia; kprofiles for member detail). Music: 30s previews via the Apple iTunes Search API.</p>
+    <p class="foot__sig">LE SSERAFIM &#183; <span id="foot-year"></span></p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/previews.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/immersive.js"></script>
+</body>
+</html>

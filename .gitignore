@@ -1,0 +1,28 @@
+# Local / build
+server.log
+server.err
+_serve.bat
+
+# Working folders: the asset downloader + originals, and the local test harness.
+# Kept on disk only; the published site needs none of it.
+_src/
+_verify/
+
+# The site ships WebP only. Originals stay on disk but are never pushed.
+assets/photos/*.png
+assets/photos/*.jpg
+assets/photos/*.jpeg
+assets/eras/*.png
+assets/eras/*.jpg
+assets/eras/*.jpeg
+
+# leftovers
+assets/photos/manifest.json
+
+# Python cache
+__pycache__/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
