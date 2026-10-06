@@ -214,11 +214,11 @@
         '<span class="pane__foot"><span id="pane-shot-label">Portrait</span> \u00b7 ' + shots.length + ' photos</span>' +
       '</div>' +
       '<div class="pane__body">' +
-        '<p class="pane__eyebrow">' + esc(m.status || 'Member') + ' \u00b7 LE SSERAFIM</p>' +
-        '<h3 class="pane__title">' + esc(m.name) + '</h3>' +
+        '<p class="pane__eyebrow fx-eyebrow">' + esc(m.status || 'Member') + ' \u00b7 LE SSERAFIM</p>' +
+        '<h3 class="pane__title fx-wipe">' + esc(m.name) + '</h3>' +
         '<p class="pane__full">' + esc(m.full) + ' \u00b7 ' + esc(m.hangul) + '</p>' +
-        '<p class="pane__lead">' + esc(m.blurb || '') + '</p>' +
-        '<p class="pane__text">' + esc(m.bio || '') + '</p>' +
+        '<p class="pane__lead" data-scramble>' + esc(m.blurb || '') + '</p>' +
+        '<p class="pane__text" data-scramble>' + esc(m.bio || '') + '</p>' +
         '<ul class="pane__facts">' + facts + '</ul>' +
         (shots.length > 1
           ? '<div class="pane__gallery">' +
@@ -247,7 +247,7 @@
     var tracks = (r.tracks || []).map(function (t, i) {
       var isLead = r.lead && t.indexOf(r.lead) === 0 ? true : false;
       var hasPv = (window.NJ_PREVIEWS || []).some(function (p) { return norm(p.track) === norm(t); });
-      return '<li class="track' + (isLead ? ' is-lead' : '') + '">' +
+      return '<li class="track fx-track' + (isLead ? ' is-lead' : '') + '" style="--i:' + i + '">' +
         '<span class="track__no">' + String(i + 1).padStart(2, '0') + '</span>' +
         '<span class="track__name">' + esc(t) + '</span>' +
         (isLead ? '<span class="track__lead">Title track</span>' : '') +
@@ -266,17 +266,17 @@
         '<span class="pane__wash" aria-hidden="true"></span>' +
       '</div>' +
       '<div class="pane__body">' +
-        '<p class="pane__eyebrow">' + esc(r.date || r.year) + ' \u00b7 ' + esc(r.type) + '</p>' +
-        '<h3 class="pane__title">' + esc(r.title) + '</h3>' +
+        '<p class="pane__eyebrow fx-eyebrow">' + esc(r.date || r.year) + ' \u00b7 ' + esc(r.type) + '</p>' +
+        '<h3 class="pane__title fx-wipe">' + esc(r.title) + '</h3>' +
         (tags ? '<div class="pane__tags">' + tags + '</div>' : '') +
-        (r.note ? '<p class="pane__lead">' + esc(r.note) + '</p>' : '') +
-        (r.extra ? '<p class="pane__text">' + esc(r.extra) + '</p>' : '') +
+        (r.note ? '<p class="pane__lead" data-scramble>' + esc(r.note) + '</p>' : '') +
+        (r.extra ? '<p class="pane__text" data-scramble>' + esc(r.extra) + '</p>' : '') +
         (play ? '<div class="pane__actions">' + play + '</div>' : '') +
-        (tracks ? '<div class="pane__section">' +
+        (tracks ? '<div class="pane__section fx-fact">' +
             '<span class="pane__section-label">Tracklist</span>' +
             '<ol class="tracks">' + tracks + '</ol>' +
           '</div>' : '') +
-        ((chart || r.sales) ? '<div class="pane__section">' +
+        ((chart || r.sales) ? '<div class="pane__section fx-fact">' +
             '<span class="pane__section-label">Charts and sales</span>' +
             (chart ? '<ul class="pane__charts">' + chart + '</ul>' : '') +
             (r.sales ? '<p class="pane__sales">' + esc(r.sales) + '</p>' : '') +
@@ -296,9 +296,9 @@
         '<span class="pane__wash" aria-hidden="true"></span>' +
       '</div>' +
       '<div class="pane__body">' +
-        '<p class="pane__eyebrow">Era \u00b7 ' + esc(e.year) + '</p>' +
-        '<h3 class="pane__title">' + esc(e.title) + '</h3>' +
-        '<p class="pane__text">' + esc(e.blurb) + '</p>' +
+        '<p class="pane__eyebrow fx-eyebrow">Era \u00b7 ' + esc(e.year) + '</p>' +
+        '<h3 class="pane__title fx-wipe">' + esc(e.title) + '</h3>' +
+        '<p class="pane__text" data-scramble>' + esc(e.blurb) + '</p>' +
         (strip ? '<div class="pane__strip" aria-label="' + esc(e.title) + ' photos">' + strip + '</div>' : '') +
         (next ? '<p class="pane__next">Next era \u00b7 ' + esc(next.title) + ', ' + esc(next.year) + '</p>' : '<p class="pane__next">Latest era on this page.</p>') +
       '</div>';
@@ -308,7 +308,7 @@
 
   function paneMilestone(a) {
     var stats = (NJ.stats || []).map(function (s) {
-      return '<li class="stat"><span class="stat__num">' + esc(s[0]) + '</span>' +
+      return '<li class="stat fx-fact"><span class="stat__num" data-count="' + esc(s[0]) + '">0</span>' +
         '<span class="stat__label">' + esc(s[1]) + '</span>' +
         '<span class="stat__note">' + esc(s[2]) + '</span></li>';
     }).join('');
@@ -324,7 +324,7 @@
 
     var facts = (NJ.achievements || []).map(function (m) {
       var on = m === a;
-      return '<li class="milefact' + (on ? ' is-on' : '') + '" style="--tone:' + esc(m.tone) + '">' +
+      return '<li class="milefact fx-cascade' + (on ? ' is-on' : '') + '" style="--tone:' + esc(m.tone) + '">' +
         '<span class="milefact__year">' + esc(m.year) + '</span>' +
         '<span class="milefact__body">' +
           '<span class="milefact__title">' + esc(m.title) + '</span>' +
@@ -335,22 +335,22 @@
 
     return '' +
       '<div class="pane__body pane__body--wide pane__body--records">' +
-        '<p class="pane__eyebrow">Milestone \u00b7 ' + esc(a.date) + ' \u00b7 ' + esc(GROUP_LABEL[a.group] || 'Milestone') + '</p>' +
-        '<h3 class="pane__title pane__title--year" style="color:' + esc(a.tone || 'inherit') + '">' + esc(a.year) + '</h3>' +
-        '<p class="pane__lead">' + esc(a.title) + '</p>' +
-        '<p class="pane__text">' + esc(a.note) + '</p>' +
+        '<p class="pane__eyebrow fx-eyebrow">Milestone \u00b7 ' + esc(a.date) + ' \u00b7 ' + esc(GROUP_LABEL[a.group] || 'Milestone') + '</p>' +
+        '<h3 class="pane__title pane__title--year fx-wipe" style="color:' + esc(a.tone || 'inherit') + '">' + esc(a.year) + '</h3>' +
+        '<p class="pane__lead" data-scramble>' + esc(a.title) + '</p>' +
+        '<p class="pane__text" data-scramble>' + esc(a.note) + '</p>' +
 
-        '<div class="pane__section">' +
+        '<div class="pane__section fx-fact">' +
           '<span class="pane__section-label">The record so far</span>' +
           '<ul class="stats">' + stats + '</ul>' +
         '</div>' +
 
-        '<div class="pane__section">' +
+        '<div class="pane__section fx-fact">' +
           '<span class="pane__section-label">Tours</span>' +
           '<ul class="tours">' + tours + '</ul>' +
         '</div>' +
 
-        '<div class="pane__section">' +
+        '<div class="pane__section fx-fact">' +
           '<span class="pane__section-label">All milestones</span>' +
           '<ul class="milefacts">' + facts + '</ul>' +
         '</div>' +

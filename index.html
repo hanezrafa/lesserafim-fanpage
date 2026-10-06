@@ -103,7 +103,7 @@
 
     <!-- ============ ABOUT: a group fact card ============ -->
     <section class="intro" data-section="About" aria-labelledby="intro-h">
-      <h2 id="intro-h" class="section-num"><span>01</span> About</h2>
+      <h2 id="intro-h" class="section-num fx-glitch"><span>01</span> About</h2>
 
       <div class="factcard">
         <header class="factcard__head">
@@ -140,7 +140,7 @@
         </dl>
 
         <footer class="factcard__foot">
-          <p class="factcard__intro" id="intro-text"></p>
+          <p class="factcard__intro" id="intro-text" data-scramble></p>
         </footer>
       </div>
     </section>
@@ -148,7 +148,7 @@
     <!-- ============ THE ARCHIVE: a rail of items + a detail pane ============ -->
     <section class="archive" id="archive" data-section="Archive" aria-label="LE SSERAFIM archive">
       <div class="archive__head">
-        <h2 class="section-num"><span>02</span> The Archive</h2>
+        <h2 class="section-num fx-glitch"><span>02</span> The Archive</h2>
         <p class="archive__hint">Pick a member, a release, an era or a milestone. The detail opens beside the list, and the previews loop as you browse.</p>
       </div>
 
@@ -204,14 +204,15 @@
   </main>
 
   <footer class="foot">
-    <p class="foot__note">Unofficial fan page. Not affiliated with LE SSERAFIM, Source Music or HYBE.</p>
-    <p class="foot__credit">Photos: fan wallpaper archive, uhdpaper.com. Facts: public sources (Wikipedia; kprofiles for member detail). Music: 30s previews via the Apple iTunes Search API.</p>
+    <p class="foot__note" data-splitwords>Unofficial fan page. Not affiliated with LE SSERAFIM, Source Music or HYBE.</p>
+    <p class="foot__credit" data-splitwords>Photos: fan wallpaper archive, uhdpaper.com. Facts: public sources (Wikipedia; kprofiles for member detail). Music: 30s previews via the Apple iTunes Search API.</p>
     <p class="foot__sig">LE SSERAFIM &#183; <span id="foot-year"></span></p>
   </footer>
 
   <script src="js/data.js"></script>
   <script src="js/previews.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/texthover.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/immersive.js"></script>
 </body>
