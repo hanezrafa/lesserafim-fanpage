@@ -31,10 +31,19 @@
     <canvas id="starfield"></canvas>
   </div>
 
-  <!-- custom star cursor -->
-  <div class="star-cursor" id="star-cursor" aria-hidden="true">
-    <span class="star-cursor__dot"></span>
-    <span class="star-cursor__ring"></span>
+  <!-- custom cursor: a spinning ring of text around a small core -->
+  <div class="ring-cursor" id="ring-cursor" aria-hidden="true">
+    <span class="ring-cursor__spin">
+      <svg class="ring-cursor__svg" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true" focusable="false">
+        <defs>
+          <path id="ring-path" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" />
+        </defs>
+        <text class="ring-cursor__text">
+          <textPath href="#ring-path" startOffset="0">LE&#160;SSERAFIM&#160;&#183;&#160;FEARNOT&#160;&#183;&#160;I&#8217;M&#160;FEARLESS&#160;&#183;&#160;</textPath>
+        </text>
+      </svg>
+    </span>
+    <span class="ring-cursor__core"></span>
   </div>
 
   <!-- screen texture: a faint film grain (no scanline) -->

@@ -138,39 +138,37 @@
   }
 
   /* ---------------------------------------------------------
-     Star cursor (pointer devices only)
+     Ring cursor (pointer devices only)
+     A ring of text follows the pointer with a soft lag, and turns
+     slowly on its own. It stays hidden until the pointer moves, so
+     a stray ring never sits over the wordmark at load.
      --------------------------------------------------------- */
   function initCursor() {
-    var cursor = document.getElementById('star-cursor');
+    var cursor = document.getElementById('ring-cursor');
     if (!cursor || !finePointer || reduce) return;
-    var dot = cursor.querySelector('.star-cursor__dot');
-    var ring = cursor.querySelector('.star-cursor__ring');
     var mx = window.innerWidth / 2, my = window.innerHeight / 2;
     var rx = mx, ry = my;
     var shown = false;
 
     document.addEventListener('mousemove', function (e) {
-      // do not draw the ring until the pointer actually moves, so a stray
-      // ring never sits over the wordmark at load
       if (!shown) {
         shown = true;
-        document.body.classList.add('has-star-cursor');
+        document.body.classList.add('has-ring-cursor');
         cursor.classList.add('is-live');
         rx = e.clientX; ry = e.clientY;
-        ring.style.setProperty('--rx', rx + 'px');
-        ring.style.setProperty('--ry', ry + 'px');
+        cursor.style.setProperty('--rx', rx + 'px');
+        cursor.style.setProperty('--ry', ry + 'px');
       }
       mx = e.clientX; my = e.clientY;
-      dot.style.setProperty('--cx', mx + 'px');
-      dot.style.setProperty('--cy', my + 'px');
-      var hot = e.target.closest('a, button, input');
+      var hot = e.target.closest('a, button, input, [data-member], .pane__thumb, .track__play');
       cursor.classList.toggle('is-hot', !!hot);
     });
     (function loop() {
-      rx += (mx - rx) * 0.17;
-      ry += (my - ry) * 0.17;
-      ring.style.setProperty('--rx', rx + 'px');
-      ring.style.setProperty('--ry', ry + 'px');
+      // a gentle lag, so the ring trails the pointer rather than sticking to it
+      rx += (mx - rx) * 0.15;
+      ry += (my - ry) * 0.15;
+      cursor.style.setProperty('--rx', rx.toFixed(1) + 'px');
+      cursor.style.setProperty('--ry', ry.toFixed(1) + 'px');
       requestAnimationFrame(loop);
     })();
   }

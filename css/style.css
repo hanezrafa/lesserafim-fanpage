@@ -56,9 +56,6 @@
 }
 /* the starfield is a night thing; hide it in the day skin */
 [data-theme="light"] .firmament { opacity: 0.25; }
-[data-theme="light"] .star-cursor { mix-blend-mode: multiply; }
-[data-theme="light"] .star-cursor__dot,
-[data-theme="light"] .star-cursor__ring { background: var(--ink); border-color: var(--fearless); }
 
 *,
 *::before,
@@ -1327,45 +1324,69 @@ main { display: block; }
 
 
 /* =========================================================
-   STAR CURSOR (pointer devices only)
+   RING CURSOR (pointer devices only)
+   A ring of text, LE SSERAFIM - FEARNOT - I'M FEARLESS, that
+   turns slowly and follows the pointer, with a small core dot at
+   its centre. The text runs on a circle via SVG textPath.
    ========================================================= */
-.star-cursor { display: none; }
+.ring-cursor { display: none; }
 @media (hover: hover) and (pointer: fine) {
-  .star-cursor {
+  .ring-cursor {
     display: none;
     position: fixed;
     z-index: 9999;
     top: 0;
     left: 0;
     pointer-events: none;
+    /* the whole thing is centred on the pointer */
+    width: 120px;
+    height: 120px;
+    margin: -60px 0 0 -60px;
+    transform: translate(var(--rx, 0px), var(--ry, 0px));
   }
-  .star-cursor.is-live { display: block; }
-  body.has-star-cursor,
-  body.has-star-cursor a,
-  body.has-star-cursor button { cursor: none; }
-  .star-cursor__dot {
+  .ring-cursor.is-live { display: block; }
+  body.has-ring-cursor,
+  body.has-ring-cursor a,
+  body.has-ring-cursor button { cursor: none; }
+
+  .ring-cursor__spin {
     position: absolute;
-    width: 7px;
-    height: 7px;
-    margin: -3.5px 0 0 -3.5px;
-    border-radius: 50%;
-    background: var(--star);
-    transform: translate(var(--cx, 0), var(--cy, 0)) scale(var(--cs, 1));
-    transition: background 0.18s;
+    inset: 0;
+    display: block;
+    animation: ring-turn 14s linear infinite;
   }
-  .star-cursor__ring {
+  @keyframes ring-turn { to { transform: rotate(360deg); } }
+
+  .ring-cursor__svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .ring-cursor__text {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    fill: var(--fearless-dk);
+    opacity: 0.95;
+    transition: fill 0.2s, opacity 0.2s;
+  }
+  /* the small core dot at the centre */
+  .ring-cursor__core {
     position: absolute;
-    width: 42px;
-    height: 42px;
-    margin: -21px 0 0 -21px;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
     border-radius: 50%;
-    border: 2.5px solid var(--fearless);
-    opacity: 0.8;
-    transform: translate(var(--rx, 0), var(--ry, 0));
-    transition: border-color 0.2s, opacity 0.2s;
+    background: var(--ink);
+    transition: transform 0.18s ease, background 0.18s ease;
   }
-  .star-cursor.is-hot .star-cursor__dot { background: var(--fearless-dk); --cs: 1.9; }
-  .star-cursor.is-hot .star-cursor__ring { border-color: var(--fearless-dk); opacity: 1; }
+  /* over a link: the ring tightens and the core swells a little */
+  .ring-cursor.is-hot .ring-cursor__core { transform: scale(2.1); background: var(--fearless-dk); }
+  .ring-cursor.is-hot .ring-cursor__text { fill: var(--ink); opacity: 1; }
+  .ring-cursor.is-hot .ring-cursor__spin { animation-duration: 6s; }
+
+  /* a light theme needs the light twin of the ring */
+  [data-theme="light"] .ring-cursor__text { fill: var(--fearless); }
+  [data-theme="light"] .ring-cursor__core { background: var(--ink); }
 }
 
 /* click ripple */
@@ -1689,7 +1710,7 @@ main { display: block; }
   .section-num .ti-caret { display: none; }
   .section-num::after { transform: scaleX(1); }
   .firmament,
-  .star-cursor { display: none !important; }
+  .ring-cursor { display: none !important; }
   /* the cassette keeps its label, but the reels do not turn */
   .cassette.is-playing .reel--left,
   .cassette.is-playing .reel--right { animation: none !important; }
