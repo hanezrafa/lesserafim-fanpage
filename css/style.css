@@ -1120,8 +1120,8 @@ main { display: block; }
   color: var(--ink-soft);
 }
 .track:last-child { border-bottom: 0; }
-.track__no { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-faint); min-width: 1.4em; }
-.track__name { flex: 1 1 auto; min-width: 0; }
+.track__no { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-faint); min-width: 1.6em; }
+.track__name { flex: 1 1 auto; min-width: 0; padding-right: 0.6rem; }
 .track.is-lead { color: var(--ink); }
 .track.is-lead .track__name { font-weight: 700; }
 .track__lead {
