@@ -1051,6 +1051,152 @@ main { display: block; }
 .pane__strip img:hover { filter: saturate(1.05) brightness(1); transform: scale(1.03); }
 
 /* =========================================================
+   DISCOGRAPHY PANE - tags, tracklist, charts
+   ========================================================= */
+.pane__tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.8rem; }
+.tag {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fearless-dk);
+  border: 1px solid color-mix(in srgb, var(--fearless) 45%, transparent);
+  padding: 0.2rem 0.45rem;
+}
+.pane__section { margin-top: 1.3rem; border-top: 1px dashed var(--board-3); padding-top: 0.9rem; }
+.pane__section-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fearless-dk);
+  margin-bottom: 0.6rem;
+}
+.tracks { list-style: none; margin: 0; padding: 0; }
+.track {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--board-3) 55%, transparent);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.track:last-child { border-bottom: 0; }
+.track__no { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-faint); min-width: 1.4em; }
+.track__name { flex: 1 1 auto; min-width: 0; }
+.track.is-lead { color: var(--ink); }
+.track.is-lead .track__name { font-weight: 700; }
+.track__lead {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fearless-dk);
+  white-space: nowrap;
+}
+.track__play {
+  flex: none;
+  width: 1.5rem; height: 1.5rem;
+  display: grid; place-items: center;
+  border: 1px solid var(--board-3);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.track__play:hover { border-color: var(--fearless); background: var(--fearless); }
+.track__play:hover .release__play-tri { background: #ffffff; }
+.track__play.is-playing { background: var(--ink); border-color: var(--ink); }
+.track__play .release__play-tri { width: 7px; height: 9px; }
+.pane__charts { list-style: none; margin: 0 0 0.6rem; padding: 0; }
+.pane__charts .chartrow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--board-3) 55%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+.pane__charts .k { color: var(--ink-faint); }
+.pane__charts .v { color: var(--ink); font-weight: 700; }
+.pane__sales { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-soft); margin: 0.5rem 0 0; }
+
+/* =========================================================
+   MILESTONES PANE - stat cards, tours, all-milestones list
+   ========================================================= */
+.pane__body--records .stats {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+}
+.stat {
+  border: 1px solid var(--board-3);
+  background: color-mix(in srgb, var(--board) 60%, transparent);
+  padding: 0.8rem 0.9rem;
+}
+.stat__num {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1;
+  color: var(--fearless-dk);
+}
+.stat__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-top: 0.35rem;
+}
+.stat__note { display: block; font-family: var(--font-mono); font-size: 0.64rem; color: var(--ink-faint); margin-top: 0.25rem; }
+
+.pane__body--records .tours { list-style: none; margin: 0; padding: 0; }
+.tour {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr auto;
+  gap: 0.2rem 0.8rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--board-3) 55%, transparent);
+}
+.tour:last-child { border-bottom: 0; }
+.tour__year { font-family: var(--font-mono); font-size: 0.72rem; color: var(--fearless-dk); grid-row: 1 / 3; }
+.tour__name { font-family: var(--font-display); font-weight: 500; font-size: 1.05rem; letter-spacing: 0.02em; }
+.tour__meta { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-soft); text-align: right; white-space: nowrap; }
+.tour__note { grid-column: 2 / 4; font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-faint); }
+
+.pane__body--records .milefacts { list-style: none; margin: 0; padding: 0; }
+.milefact {
+  position: relative;
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.55rem 0.55rem 0.55rem 0.85rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--board-3) 55%, transparent);
+}
+.milefact:last-child { border-bottom: 0; }
+.milefact::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.45rem; bottom: 0.45rem;
+  width: 3px;
+  background: var(--tone, var(--fearless));
+  opacity: 0.4;
+}
+.milefact.is-on { background: var(--board-2); }
+.milefact.is-on::before { opacity: 1; }
+.milefact__year { font-family: var(--font-mono); font-size: 0.72rem; color: var(--fearless-dk); min-width: 2.6em; }
+.milefact__body { display: flex; flex-direction: column; min-width: 0; }
+.milefact__title { font-size: 0.92rem; color: var(--ink-soft); }
+.milefact.is-on .milefact__title { color: var(--ink); font-weight: 700; }
+.milefact__date { font-family: var(--font-mono); font-size: 0.62rem; color: var(--ink-faint); margin-top: 0.15rem; }
+
+/* =========================================================
    FOOTER
    ========================================================= */
 .foot {
@@ -1183,7 +1329,8 @@ main { display: block; }
   /* a portrait box on a phone, so the whole head sits in frame */
   .pane__media { min-height: 0; max-height: none; aspect-ratio: 1 / 1; }
   .pane__media--era { aspect-ratio: 5 / 4; min-height: 0; }
-  .pane__media--art { aspect-ratio: 4 / 3; }
+  .pane__media--art { aspect-ratio: 1 / 1; padding: 1rem; }
+  .pane__media--art .pane__art img { width: min(100%, 220px); }
   .pane__portrait { object-position: center 42%; }
   .rail { grid-template-columns: 1fr 1fr; }
   .rail__tab { font-size: 0.68rem; padding: 0.6rem 0.55rem; }

@@ -41,7 +41,7 @@
 
   // keep any Play buttons in the page (the pane) in sync
   function setPlayingButton(trackName) {
-    var btns = document.querySelectorAll('.pane__play, .release__play');
+    var btns = document.querySelectorAll('.pane__play, .release__play, .track__play');
     Array.prototype.forEach.call(btns, function (b) {
       var on = b.dataset.track === trackName;
       b.classList.toggle('is-playing', on);

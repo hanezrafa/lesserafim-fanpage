@@ -222,20 +222,52 @@
       ? '<button class="pane__play" type="button" data-track="' + esc(pv.track) + '" ' +
         'aria-label="Play a preview of ' + esc(r.title) + '">' +
         '<span class="release__play-tri" aria-hidden="true"></span><span class="pane__play-label">Play preview</span></button>'
-      : '<p class="pane__note">No preview available for this release.</p>';
-    var art = pv && pv.art
-      ? '<div class="pane__art"><img src="' + esc(pv.art) + '" alt="Cover of ' + esc(pv.album) + '" width="300" height="300"></div>'
       : '';
+    var art = pv && pv.art
+      ? '<img src="' + esc(pv.art) + '" alt="Cover of ' + esc(r.album || r.title) + '" width="300" height="300">'
+      : '';
+
+    var tags = (r.tags || []).map(function (t) {
+      return '<span class="tag">' + esc(t) + '</span>';
+    }).join('');
+
+    var tracks = (r.tracks || []).map(function (t, i) {
+      var isLead = r.lead && t.indexOf(r.lead) === 0 ? true : false;
+      var hasPv = (window.NJ_PREVIEWS || []).some(function (p) { return norm(p.track) === norm(t); });
+      return '<li class="track' + (isLead ? ' is-lead' : '') + '">' +
+        '<span class="track__no">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="track__name">' + esc(t) + '</span>' +
+        (isLead ? '<span class="track__lead">Title track</span>' : '') +
+        (hasPv ? '<button class="track__play" type="button" data-track="' + esc(t) + '" aria-label="Play ' + esc(t) + '">' +
+          '<span class="release__play-tri" aria-hidden="true"></span></button>' : '') +
+      '</li>';
+    }).join('');
+
+    var chart = (r.chart || []).map(function (c) {
+      return '<li class="chartrow"><span class="k">' + esc(c[0]) + '</span><span class="v">#' + esc(c[1]) + '</span></li>';
+    }).join('');
+
     return '' +
-      '<div class="pane__media pane__media--art">' + art +
+      '<div class="pane__media pane__media--art">' +
+        (art ? '<div class="pane__art">' + art + '</div>' : '') +
         '<span class="pane__wash" aria-hidden="true"></span>' +
       '</div>' +
       '<div class="pane__body">' +
-        '<p class="pane__eyebrow">' + esc(r.year) + ' \u00b7 ' + esc(r.type) + '</p>' +
+        '<p class="pane__eyebrow">' + esc(r.date || r.year) + ' \u00b7 ' + esc(r.type) + '</p>' +
         '<h3 class="pane__title">' + esc(r.title) + '</h3>' +
+        (tags ? '<div class="pane__tags">' + tags + '</div>' : '') +
         (r.note ? '<p class="pane__lead">' + esc(r.note) + '</p>' : '') +
-        (pv ? '<p class="pane__text">' + esc(pv.album) + '</p>' : '') +
-        '<div class="pane__actions">' + play + '</div>' +
+        (r.extra ? '<p class="pane__text">' + esc(r.extra) + '</p>' : '') +
+        (play ? '<div class="pane__actions">' + play + '</div>' : '') +
+        (tracks ? '<div class="pane__section">' +
+            '<span class="pane__section-label">Tracklist</span>' +
+            '<ol class="tracks">' + tracks + '</ol>' +
+          '</div>' : '') +
+        ((chart || r.sales) ? '<div class="pane__section">' +
+            '<span class="pane__section-label">Charts and sales</span>' +
+            (chart ? '<ul class="pane__charts">' + chart + '</ul>' : '') +
+            (r.sales ? '<p class="pane__sales">' + esc(r.sales) + '</p>' : '') +
+          '</div>' : '') +
       '</div>';
   }
 
@@ -259,13 +291,56 @@
       '</div>';
   }
 
+  var GROUP_LABEL = { first: 'A first', award: 'An award', record: 'A record' };
+
   function paneMilestone(a) {
+    var stats = (NJ.stats || []).map(function (s) {
+      return '<li class="stat"><span class="stat__num">' + esc(s[0]) + '</span>' +
+        '<span class="stat__label">' + esc(s[1]) + '</span>' +
+        '<span class="stat__note">' + esc(s[2]) + '</span></li>';
+    }).join('');
+
+    var tours = (NJ.tours || []).map(function (t) {
+      return '<li class="tour">' +
+        '<span class="tour__year">' + esc(t.year) + '</span>' +
+        '<span class="tour__name">' + esc(t.name) + '</span>' +
+        '<span class="tour__meta">' + esc(t.shows) + (t.gross ? ' \u00b7 ' + esc(t.gross) : '') + '</span>' +
+        '<span class="tour__note">' + esc(t.note) + '</span>' +
+      '</li>';
+    }).join('');
+
+    var facts = (NJ.achievements || []).map(function (m) {
+      var on = m === a;
+      return '<li class="milefact' + (on ? ' is-on' : '') + '" style="--tone:' + esc(m.tone) + '">' +
+        '<span class="milefact__year">' + esc(m.year) + '</span>' +
+        '<span class="milefact__body">' +
+          '<span class="milefact__title">' + esc(m.title) + '</span>' +
+          '<span class="milefact__date">' + esc(m.date) + ' \u00b7 ' + esc(GROUP_LABEL[m.group] || 'Milestone') + '</span>' +
+        '</span>' +
+      '</li>';
+    }).join('');
+
     return '' +
-      '<div class="pane__body pane__body--wide">' +
-        '<p class="pane__eyebrow">Milestone \u00b7 ' + esc(a.date) + '</p>' +
-        '<h3 class="pane__title pane__title--year">' + esc(a.year) + '</h3>' +
+      '<div class="pane__body pane__body--wide pane__body--records">' +
+        '<p class="pane__eyebrow">Milestone \u00b7 ' + esc(a.date) + ' \u00b7 ' + esc(GROUP_LABEL[a.group] || 'Milestone') + '</p>' +
+        '<h3 class="pane__title pane__title--year" style="color:' + esc(a.tone || 'inherit') + '">' + esc(a.year) + '</h3>' +
         '<p class="pane__lead">' + esc(a.title) + '</p>' +
         '<p class="pane__text">' + esc(a.note) + '</p>' +
+
+        '<div class="pane__section">' +
+          '<span class="pane__section-label">The record so far</span>' +
+          '<ul class="stats">' + stats + '</ul>' +
+        '</div>' +
+
+        '<div class="pane__section">' +
+          '<span class="pane__section-label">Tours</span>' +
+          '<ul class="tours">' + tours + '</ul>' +
+        '</div>' +
+
+        '<div class="pane__section">' +
+          '<span class="pane__section-label">All milestones</span>' +
+          '<ul class="milefacts">' + facts + '</ul>' +
+        '</div>' +
       '</div>';
   }
 
@@ -409,7 +484,8 @@
   }
   if (pane) {
     pane.addEventListener('click', function (e) {
-      var play = e.target.closest('.pane__play');
+      // a per-track play control, or the release's main Play button
+      var play = e.target.closest('.pane__play, .track__play');
       if (play && play.dataset.track && window.lssPlayTrack) {
         window.lssPlayTrack(play.dataset.track);
         return;
